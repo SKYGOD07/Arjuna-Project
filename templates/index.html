@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AiBSFMS - AI-Based Smart Food Management System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loader-container" id="loader">
+        <div class="loader"></div>
+        <div class="loading-text">Loading AiBSFMS...</div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <!-- Header -->
+        <header>
+            <nav class="nav-container">
+                <div class="brand" onclick="goToHome()">AiBSFMS</div>
+                <div class="auth-buttons" id="authButtons">
+                    <button class="btn btn-signin" onclick="openAuthModal('signin')">Sign In</button>
+                    <button class="btn btn-login" onclick="openAuthModal('login')">Log In</button>
+                </div>
+                <div class="user-menu" id="userMenu">
+                    <span class="user-name" id="userName"></span>
+                    <button class="btn btn-signin" onclick="goToDashboard()">Dashboard</button>
+                    <button class="btn btn-login" onclick="logout()">Logout</button>
+                </div>
+            </nav>
+        </header>
+
+        <!-- Home Page -->
+        <div id="homePage" class="page active">
+            <!-- Hero Section -->
+            <section class="hero">
+                <h1>AI-Based Smart Food Management System</h1>
+                <p>
+                    Revolutionize the way you track, manage, and optimize food consumption with cutting-edge 
+                    AI technology. Reduce waste, improve efficiency, and make smarter decisions at every level 
+                    - from individual meals to large-scale operations.
+                </p>
+            </section>
+
+            <!-- Tracking Levels -->
+            <section class="tracking-levels">
+                <h2 class="section-title">Choose Your Tracking Level</h2>
+                <div class="levels-grid">
+                    <!-- Individual Level -->
+                    <div class="level-card" onclick="selectLevel('individual')">
+                        <div class="level-icon">👤</div>
+                        <h3>Individual/Personal Level</h3>
+                        <p>
+                            Track your personal food consumption from cooking to eating. Monitor waste, 
+                            get AI-powered suggestions, and optimize your meals with real-time camera tracking.
+                        </p>
+                        <span class="badge">Available Now</span>
+                    </div>
+
+                    <!-- Family Level -->
+                    <div class="level-card disabled">
+                        <div class="level-icon">👨‍👩‍👧‍👦</div>
+                        <h3>Family Level</h3>
+                        <p>
+                            Manage food tracking for your entire family. Get insights on consumption patterns, 
+                            reduce household waste, and plan meals more effectively.
+                        </p>
+                        <span class="badge badge-soon">Coming Soon</span>
+                    </div>
+
+                    <!-- Firm/Group Level -->
+                    <div class="level-card disabled">
+                        <div class="level-icon">🏢</div>
+                        <h3>Firm/Organization Level</h3>
+                        <p>
+                            Enterprise-grade food management for restaurants, cafeterias, and large organizations. 
+                            Track inventory, reduce waste, and optimize operations at scale.
+                        </p>
+                        <span class="badge badge-soon">Coming Soon</span>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Dashboard Page -->
+        <div id="dashboardPage" class="page">
+            <section class="dashboard">
+                <div class="dashboard-header">
+                    <h1>Your Dashboard</h1>
+                    <button class="btn btn-login" onclick="selectLevel('individual')">Start New Tracking</button>
+                </div>
+
+                <!-- Statistics Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Total Sessions</h3>
+                        <div class="value" id="totalSessions">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Total Waste</h3>
+                        <div class="value" id="totalWaste">0</div>
+                        <div class="unit">kg</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Food Consumed</h3>
+                        <div class="value" id="totalConsumed">0</div>
+                        <div class="unit">kg</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Waste Percentage</h3>
+                        <div class="value" id="wastePercentage">0</div>
+                        <div class="unit">%</div>
+                    </div>
+                </div>
+
+                <!-- Charts -->
+                <div class="chart-container">
+                    <h2 style="color: #00ff88; margin-bottom: 1.5rem;">Waste Breakdown</h2>
+                    <canvas id="wasteChart"></canvas>
+                </div>
+
+                <div class="chart-container">
+                    <h2 style="color: #00ff88; margin-bottom: 1.5rem;">Recent Detections</h2>
+                    <canvas id="detectionsChart"></canvas>
+                </div>
+
+                <!-- AI Suggestions -->
+                <div class="suggestions-list">
+                    <h2 style="color: #00ff88; margin-bottom: 1.5rem;">AI Suggestions</h2>
+                    <div id="suggestionsList">
+                        <p style="color: #b0b0b0;">No suggestions yet. Start tracking to get personalized AI recommendations!</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Auth Modal -->
+    <div class="modal" id="authModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="authTitle">Sign In</h2>
+                <button class="close-btn" onclick="closeAuthModal()">&times;</button>
+            </div>
+            <form id="authForm">
+                <div class="form-group" id="nameGroup">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" required>
+                </div>
+                <div class="error-message" id="authError"></div>
+                <button type="submit" class="btn btn-login" style="width: 100%;">Continue</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Tracking Setup Modal -->
+    <div class="modal" id="trackingModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Individual Tracking Setup</h2>
+                <button class="close-btn" onclick="closeTrackingModal()">&times;</button>
+            </div>
+            
+            <form id="userDataForm">
+                <div class="form-group">
+                    <label for="age">Age</label>
+                    <input type="number" id="age" required>
+                </div>
+                <div class="form-group">
+                    <label for="weight">Weight (kg)</label>
+                    <input type="number" id="weight" step="0.1" required>
+                </div>
+                <div class="form-group">
+                    <label for="height">Height (cm)</label>
+                    <input type="number" id="height" required>
+                </div>
+                <div class="form-group">
+                    <label for="dietary">Dietary Preferences</label>
+                    <select id="dietary" required>
+                        <option value="">Select...</option>
+                        <option value="vegetarian">Vegetarian</option>
+                        <option value="non-vegetarian">Non-Vegetarian</option>
+                        <option value="vegan">Vegan</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="goals">Goals</label>
+                    <textarea id="goals" rows="3" placeholder="E.g., Reduce food waste, track calories, etc."></textarea>
+                </div>
+                <button type="submit" class="btn btn-login" style="width: 100%;">Continue to Tracking Options</button>
+            </form>
+
+            <!-- Tracking Options -->
+            <div class="tracking-options" id="trackingOptions">
+                <h3 style="color: #00ff88; margin-bottom: 1.5rem;">Select Tracking Mode</h3>
+                
+                <div class="option-card" onclick="startTracking('cooking')">
+                    <h4>🍳 Full Cooking Process</h4>
+                    <p>Track from the beginning - ingredient preparation, cooking process, waste during cooking, and get suggestions for using peels and scraps.</p>
+                </div>
+
+                <div class="option-card" onclick="startTracking('eating')">
+                    <h4>🍽️ Eating & Consumption</h4>
+                    <p>Track your plate before eating, monitor refills, detect food spillage, and analyze consumption patterns.</p>
+                </div>
+
+                <div class="option-card" onclick="startTracking('summary')">
+                    <h4>📊 Complete Analysis</h4>
+                    <p>Full overview of food prepared vs. consumed with AI-powered suggestions for better efficiency and waste reduction.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Camera View -->
+    <div class="camera-container" id="cameraContainer">
+        <video id="videoElement" autoplay></video>
+        <div class="camera-controls">
+            <button class="btn btn-signin" onclick="stopTracking()">Stop Tracking</button>
+            <button class="btn btn-login" onclick="captureFrame()">Analyze Frame</button>
+        </div>
+        <div class="status-message" id="statusMessage">Initializing camera...</div>
+        <div class="detections-panel" id="detectionsPanel" style="display: none;">
+            <h3 style="color: #00ff88; margin-bottom: 1rem;">Detected Items</h3>
+            <div id="detectionsList"></div>
+        </div>
+    </div>
+    <script src="/static/script.js"></script>
+</body>
+</html>
