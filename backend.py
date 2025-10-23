@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, session
+from flask import Flask, request, jsonify, session, render_template
 from flask_cors import CORS
 import sqlite3
 import hashlib
@@ -680,6 +680,10 @@ def update_user_statistics(user_id):
 
 # Initialize database on startup
 init_db()
+
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 if __name__ == '__main__':
     print("\n" + "="*50)

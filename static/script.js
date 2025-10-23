@@ -1,5 +1,5 @@
- // Configuration
-        const API_URL = 'http://localhost:5000/api';
+// Configuration
+        const API_URL = '/api';
         
         // Global variables
         let currentLevel = '';
