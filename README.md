@@ -175,8 +175,3 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ---
 
-## 📧 Contact
-
-Your Name - [@YourTwitterHandle](https://twitter.com/your_handle) - email@example.com
-
-Project Link: [https://github.com/SKYGOD07/Arjuna-Project](https://github.com/SKYGOD07/Arjuna-Project)
